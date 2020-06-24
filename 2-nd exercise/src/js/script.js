@@ -26,12 +26,14 @@ if (personalMovieDB.count < 10) {
     let film = prompt("What one of the last films you had seen?", "");
     if (film === null || film === "" || film.length > 50) {
         i--;
+        console.log("error");
         continue;
     }
 
     let rate = prompt("What rate can you give?", "");
     if (rate === null || rate === "" || rate.length > 50) {
         i--;
+        console.log("error");
         continue;
     }
     personalMovieDB.movies[film] = +rate;
@@ -42,11 +44,13 @@ let i = 0;
 while (i < 2) {
     let film = prompt("What one of the last films you had seen?", "");
     if (film === null || film === "" || film.length > 50) {
+        console.log("error");
         continue;
     }
 
     let rate = prompt("What rate can you give?", "");
-    if (rate === null || rate === "" || rate.length > 50) {
+    if (rate === null || rate === "") {
+        console.log("error");
         continue;
     }
     
