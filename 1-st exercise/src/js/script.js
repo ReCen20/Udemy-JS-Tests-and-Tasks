@@ -19,4 +19,3 @@ personalMovieDB.movies[firstFilm] = firstRate;
 personalMovieDB.movies[secondFilm] = secondRate;
 
 console.log(personalMovieDB.movies);
-
