@@ -65,7 +65,7 @@ function showMyDB () {
 
 function writeYourGenres () {
     for(let i = 0; i < 3; i++) {
-        let genre = prompt(`Your lovely genre is under number ${i}`, "");
+        let genre = prompt(`Your lovely genre is under number ${i + 1}`, "");
 
         if (genre === null || genre === "") {
             i--;
@@ -78,4 +78,4 @@ function writeYourGenres () {
 }
 
 writeYourGenres();
-showMyDB();
+showMyDB(); 
