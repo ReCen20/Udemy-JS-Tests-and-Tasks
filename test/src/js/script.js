@@ -1,11 +1,8 @@
-"use strict";
+let redBoxes = document.querySelectorAll('.red-box');
 
-let array = [1, 12, 3, 9, 17, 24];
+function deleteFunction (e) {
+    console.log("click");
+}
 
-// array[9] = 167;
-
-array.forEach(function(item, index, arr){
-    console.log(`${index} element of \"${arr}\" is ${item}`);
-});
-
-console.log(typeof(+"Infinity"));
+redBoxes[0].addEventListener('click', deleteFunction);
+redBoxes[0].removeEventListener('click', deleteFunction);
