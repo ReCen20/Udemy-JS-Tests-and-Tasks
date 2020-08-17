@@ -1,8 +1,3 @@
-let redBoxes = document.querySelectorAll('.red-box');
+const now = new Date();
 
-function deleteFunction (e) {
-    console.log("click");
-}
-
-redBoxes[0].addEventListener('click', deleteFunction);
-redBoxes[0].removeEventListener('click', deleteFunction);
+console.log(new Date().getTimezoneOffset);
