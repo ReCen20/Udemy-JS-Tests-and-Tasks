@@ -96,34 +96,51 @@ window.addEventListener('DOMContentLoaded', function() {
 
     setClock('.timer', endtime);
 
-    // modal 0.1
+    // modal 0.2
 
-    function makeModal (modalTriggers, modal) {
+    function makeModal (modalTriggers, modal, pauseTime) {
         const modalCloseTrigger = modal.querySelector("[data-modal='close']");
 
-        modalTriggers.forEach(function (item) {
-            item.addEventListener('click', () => {
-                modal.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            });
-        });
+        function showModal () {
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            clearInterval(setModalTimer);
+        }
 
-        function closeModal () {
+        function hideModal () {
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
         }
 
-        modalCloseTrigger.addEventListener('click', closeModal);
+        modalTriggers.forEach(function (item) {
+            item.addEventListener('click', () => {
+                showModal();
+            });
+        });
+
+        const setModalTimer = setTimeout(showModal, pauseTime);
+
+        modalCloseTrigger.addEventListener('click', hideModal);
 
         modal.addEventListener('click', (e) => {
             if (modal === e.target) {
-                closeModal();
+                hideModal();
             }
         });
+
+        function showModalByScroll () {
+            if(document.documentElement.scrollTop + document.documentElement.clientHeight >= 
+                document.documentElement.scrollHeight - 1) {
+                    showModal();
+                    document.removeEventListener('scroll', showModalByScroll);
+                }
+        }
+
+        document.addEventListener('scroll', showModalByScroll);
         
         document.addEventListener('keydown', (e) => {
             if(e.code === "Escape" && modal.style.display === 'block') {
-                closeModal();
+            hideModal();
             }
         });
     }
@@ -131,5 +148,5 @@ window.addEventListener('DOMContentLoaded', function() {
     const modalTriggers = document.querySelectorAll("[data-modal='open']"),
         modal = document.querySelector("[data-modal='modal']");
 
-    makeModal(modalTriggers, modal);
+    makeModal(modalTriggers, modal, 15000);
 });
