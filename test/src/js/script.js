@@ -1,3 +1,7 @@
-const now = new Date();
+let button = document.querySelector("button"),
+    box = document.querySelector(".box");
 
-console.log(new Date().getTimezoneOffset);
+button.addEventListener('click', function () {
+    box.scrollTop = 0;
+    console.log(box.scrollTop);
+});
