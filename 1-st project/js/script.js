@@ -153,18 +153,20 @@ window.addEventListener('DOMContentLoaded', function() {
     // class for cards v 0.1
 
     class MenuItem {
-        constructor (src, alt, title, descr, price, parentSelector) {
+        constructor (src, alt, title, descr, price, parentSelector, ...classes) {
             this.src = src;
             this.alt = alt;
             this.title = title;
             this.descr = descr;
             this.price = price;
             this.parentSelector = parentSelector;
+            this.classes = classes;
         }
 
         makeCard() {
-            this.parentSelector.innerHTML += `
-            <div class="menu__item">
+            const element = document.createElement('div');
+
+            element.innerHTML += `
                 <img src="${this.src}" alt="${this.alt}">
                 <h3 class="menu__item-subtitle">Меню "${this.title}"</h3>
                 <div class="menu__item-descr">${this.descr}</div>
@@ -172,8 +174,16 @@ window.addEventListener('DOMContentLoaded', function() {
                 <div class="menu__item-price">
                     <div class="menu__item-cost">Цена:</div>
                     <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
-                </div>
-            </div>`;
+                </div>`;
+            if(this.classes.length === 0) {
+                element.classList.add("menu__item");
+            } else {
+                this.classes.forEach(className => {
+                    element.classList.add(className);
+                });
+            }
+
+            this.parentSelector.append(element);
         }
     }
 
@@ -186,7 +196,9 @@ window.addEventListener('DOMContentLoaded', function() {
         `Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей.
         Это абсолютно новый продукт с оптимальной ценой и высоким качеством!`,
         '229',
-        menu
+        menu,
+        "menu__item",
+        "fitness"
     ).makeCard();
     new MenuItem(
         'img/tabs/elite.jpg',
