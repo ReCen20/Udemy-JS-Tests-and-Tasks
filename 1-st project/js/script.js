@@ -219,7 +219,7 @@ window.addEventListener('DOMContentLoaded', function() {
         menu
     ).makeCard();
 
-    // POST form v 0.1
+    // POST form v 0.2
 
     let messages = {
         loading: "Загрузка",
@@ -243,14 +243,14 @@ window.addEventListener('DOMContentLoaded', function() {
             const request = new XMLHttpRequest();
             request.open("POST", "server.php");
 
-            //request.setRequestHeader("Content-type", "multipart/form-data");
-            const formData = new FormData(form);
-                //formObject = {};
+            request.setRequestHeader("Content-type", "multipart/form-data");
+            const formData = new FormData(form),
+                formObject = {};
             
-            //formData.forEach((item, value) => formObject[item] = value);
-            //const formJson = JSON.stringify(formObject);
+            formData.forEach((item, value) => formObject[item] = value);
+            const formJson = JSON.stringify(formObject);
 
-            request.send(formData);
+            request.send(formJson);
 
             request.addEventListener('load', function () {
                 if(request.status === 200) {
