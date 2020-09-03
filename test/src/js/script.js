@@ -3,7 +3,7 @@
 let obj = {
     lay: "usu",
     key: "yuy"
-}
+};
 
 let {lay, key} = obj;
 

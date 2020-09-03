@@ -150,7 +150,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     makeModal(modalTriggers, modal, 15000);
 
-    // class for cards v 0.1
+    // class for cards v 0.2
 
     class MenuItem {
         constructor (src, alt, title, descr, price, parentSelector, ...classes) {
@@ -218,4 +218,50 @@ window.addEventListener('DOMContentLoaded', function() {
         '430',
         menu
     ).makeCard();
+
+    // POST form v 0.1
+
+    let messages = {
+        loading: "Загрузка",
+        success: "Спасибо, скоро мы с вами свяжемся!",
+        failure: "Упс, что-то пошло не так..."
+    };
+
+    const forms = document.querySelectorAll("form");
+
+    forms.forEach(item => postData(item));
+    
+    function postData (form) {
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const statusMessage = document.createElement("div");
+            statusMessage.classList.add = "status";
+            statusMessage.textContent = messages.loading;
+            form.append(statusMessage);
+
+            const request = new XMLHttpRequest();
+            request.open("POST", "server.php");
+
+            //request.setRequestHeader("Content-type", "multipart/form-data");
+            const formData = new FormData(form);
+                //formObject = {};
+            
+            //formData.forEach((item, value) => formObject[item] = value);
+            //const formJson = JSON.stringify(formObject);
+
+            request.send(formData);
+
+            request.addEventListener('load', function () {
+                if(request.status === 200) {
+                    console.log(request.response);
+                    statusMessage.textContent = messages.success;
+                }
+                else {
+                    statusMessage.textContent = messages.failure;
+                }
+            });
+        });
+    }
+    
 });
