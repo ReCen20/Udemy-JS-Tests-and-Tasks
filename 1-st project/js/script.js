@@ -107,6 +107,7 @@ window.addEventListener('DOMContentLoaded', function() {
         modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
         clearInterval(setModalTimer);
+        document.removeEventListener('scroll', showModalByScroll);
     }
 
     function hideModal () {
