@@ -211,7 +211,7 @@ window.addEventListener('DOMContentLoaded', function() {
         menu
     ).makeCard();
 
-    // POST form v 0.2
+    // POST form v 0.3
 
     let messages = {
         loading: "Загрузка",
@@ -233,7 +233,7 @@ window.addEventListener('DOMContentLoaded', function() {
             form.append(statusMessage);
 
             const request = new XMLHttpRequest();
-            request.open("POST", "server.php");
+            request.open("POST", "server1.php");
 
             request.setRequestHeader("Content-type", "multipart/form-data");
             const formData = new FormData(form),
@@ -245,15 +245,39 @@ window.addEventListener('DOMContentLoaded', function() {
             request.send(formJson);
 
             request.addEventListener('load', function () {
+                statusMessage.remove();
                 if(request.status === 200) {
                     console.log(request.response);
-                    statusMessage.textContent = messages.success;
+                    showStatusModal(messages.success);
                 }
                 else {
-                    statusMessage.textContent = messages.failure;
+                    showStatusModal(messages.failure);
                 }
             });
         });
     }
     
+    function showStatusModal (message) {
+        const prevModalDialog = document.querySelector(".modal__dialog");
+        prevModalDialog.style.display = "none";
+        showModal();
+
+        const newModalDialog = document.createElement("div");
+        newModalDialog.classList.add("modal__dialog");
+        newModalDialog.innerHTML = `
+        <div class="modal__content">
+                <form action="#">
+                    <div class="modal__close" data-modal="close">&times;</div>
+                    <div class="modal__title">${message}</div>
+                </form>
+            </div>`;
+        document.querySelector(".modal").append(newModalDialog);
+
+        setTimeout(() => {
+            newModalDialog.remove();
+            hideModal();
+            prevModalDialog.style.display = "block";
+        }, 2000); 
+
+    }
 });
