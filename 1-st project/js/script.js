@@ -211,10 +211,10 @@ window.addEventListener('DOMContentLoaded', function() {
         menu
     ).makeCard();
 
-    // POST form v 0.3
+    // POST form v 0.4
 
     let messages = {
-        loading: "Загрузка",
+        loading: "img/form/spinner.svg",
         success: "Спасибо, скоро мы с вами свяжемся!",
         failure: "Упс, что-то пошло не так..."
     };
@@ -227,13 +227,15 @@ window.addEventListener('DOMContentLoaded', function() {
         form.addEventListener("submit", function (e) {
             e.preventDefault();
 
-            const statusMessage = document.createElement("div");
-            statusMessage.classList.add = "status";
-            statusMessage.textContent = messages.loading;
-            form.append(statusMessage);
+            const statusMessage = document.createElement("img");
+            statusMessage.src = messages.loading;
+            statusMessage.style.cssText = `
+                display: block;
+                margin: 0 auto;`;
+            form.insertAdjacentElement("afterend", statusMessage);
 
             const request = new XMLHttpRequest();
-            request.open("POST", "server1.php");
+            request.open("POST", "server.php");
 
             request.setRequestHeader("Content-type", "multipart/form-data");
             const formData = new FormData(form),
