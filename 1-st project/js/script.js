@@ -41,7 +41,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // timer v 0.1
+    // timer v 0.2
 
     const endtime = "2020-08-18";
 
@@ -81,16 +81,18 @@ window.addEventListener('DOMContentLoaded', function() {
         updateClock (endtime);
 
         function updateClock (endtime) {
+
             const time = getTimeRemaining(endtime);
+
+            if (time.total < 1000) {
+                clearInterval(timerInterval);
+                return;
+            }
 
             days.textContent = addZero(time.days);
             hours.textContent = addZero(time.hours);
             minutes.textContent = addZero(time.minutes);
             seconds.textContent = addZero(time.seconds);
-
-            if (time.total < 1000) {
-                clearInterval(timerInterval);
-            }
         }
     }
 
