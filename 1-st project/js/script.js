@@ -96,60 +96,52 @@ window.addEventListener('DOMContentLoaded', function() {
 
     setClock('.timer', endtime);
 
-    // modal 0.2
-
-    function makeModal (modalTriggers, modal, pauseTime) {
-        const modalCloseTrigger = modal.querySelector("[data-modal='close']");
-
-        function showModal () {
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            clearInterval(setModalTimer);
-        }
-
-        function hideModal () {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        modalTriggers.forEach(function (item) {
-            item.addEventListener('click', () => {
-                showModal();
-            });
-        });
-
-        const setModalTimer = setTimeout(showModal, pauseTime);
-
-        modalCloseTrigger.addEventListener('click', hideModal);
-
-        modal.addEventListener('click', (e) => {
-            if (modal === e.target) {
-                hideModal();
-            }
-        });
-
-        function showModalByScroll () {
-            if(document.documentElement.scrollTop + document.documentElement.clientHeight >= 
-                document.documentElement.scrollHeight - 1) {
-                    showModal();
-                    document.removeEventListener('scroll', showModalByScroll);
-                }
-        }
-
-        document.addEventListener('scroll', showModalByScroll);
-        
-        document.addEventListener('keydown', (e) => {
-            if(e.code === "Escape" && modal.style.display === 'block') {
-            hideModal();
-            }
-        });
-    }
+    // modal 0.3
 
     const modalTriggers = document.querySelectorAll("[data-modal='open']"),
         modal = document.querySelector("[data-modal='modal']");
 
-    makeModal(modalTriggers, modal, 15000);
+    function showModal () {
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+        clearInterval(setModalTimer);
+    }
 
+    function hideModal () {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    modalTriggers.forEach(function (item) {
+        item.addEventListener('click', () => {
+            showModal();
+        });
+    });
+
+    const setModalTimer = setTimeout(showModal, 15000);
+
+    modal.addEventListener('click', (e) => {
+        if (modal === e.target || e.target.getAttribute("data-modal") == "close") {
+            hideModal();
+        }
+    });
+
+    function showModalByScroll () {
+        if(document.documentElement.scrollTop + document.documentElement.clientHeight >= 
+            document.documentElement.scrollHeight - 1) {
+                showModal();
+                document.removeEventListener('scroll', showModalByScroll);
+            }
+    }
+
+    document.addEventListener('scroll', showModalByScroll);
+    
+    document.addEventListener('keydown', (e) => {
+        if(e.code === "Escape" && modal.style.display === 'block') {
+        hideModal();
+        }
+    });
+    
     // class for cards v 0.2
 
     class MenuItem {
