@@ -98,7 +98,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     setClock('.timer', endtime);
 
-    // modal 0.3
+    // modal 0.4
 
     const modalTriggers = document.querySelectorAll("[data-modal='open']"),
         modal = document.querySelector("[data-modal='modal']");
@@ -214,7 +214,7 @@ window.addEventListener('DOMContentLoaded', function() {
         menu
     ).makeCard();
 
-    // POST form v 0.4
+    // POST form v 0.5
 
     let messages = {
         loading: "img/form/spinner.svg",
@@ -223,7 +223,6 @@ window.addEventListener('DOMContentLoaded', function() {
     };
 
     const forms = document.querySelectorAll("form");
-
     forms.forEach(item => postData(item));
     
     function postData (form) {
@@ -237,28 +236,56 @@ window.addEventListener('DOMContentLoaded', function() {
                 margin: 0 auto;`;
             form.insertAdjacentElement("afterend", statusMessage);
 
-            const request = new XMLHttpRequest();
-            request.open("POST", "server.php");
-
-            request.setRequestHeader("Content-type", "multipart/form-data");
             const formData = new FormData(form),
                 formObject = {};
             
             formData.forEach((item, value) => formObject[item] = value);
             const formJson = JSON.stringify(formObject);
 
-            request.send(formJson);
-
-            request.addEventListener('load', function () {
+            fetch('server1.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formObject)
+                })
+            .finally(() => {
                 statusMessage.remove();
-                if(request.status === 200) {
-                    console.log(request.response);
-                    showStatusModal(messages.success);
-                }
-                else {
-                    showStatusModal(messages.failure);
-                }
-            });
+            })
+            .then((response) => {
+                return new Promise ((resolve, reject) => {
+                    if(response.status === 200) {
+                        resolve(response);
+                    } else {
+                        reject(response);
+                    }
+                }); 
+            })
+            .then((response)=> {
+                response.text();
+                console.log(response);
+                showStatusModal(messages.success);
+            })
+            .catch((response) => {
+                console.log(response);
+                showStatusModal(messages.failure);
+            });       
+            
+            /* fetch('server1.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formObject)
+            }).then(data => {
+                console.log(data);
+                showStatusModal(messages.success);
+                statusMessage.remove();
+            }).catch(() => {
+                showStatusModal(messages.failure);
+            }).finally(() => {
+                form.reset();
+            }); */
         });
     }
     
@@ -283,6 +310,9 @@ window.addEventListener('DOMContentLoaded', function() {
             hideModal();
             prevModalDialog.style.display = "block";
         }, 2000); 
-
     }
+
+    fetch('https://jsonplaceholder.typicode.com/todos/1')
+        .then(response => response.json())
+        .then(json => console.log(json));
 });
