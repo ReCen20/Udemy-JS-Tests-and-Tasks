@@ -154,7 +154,7 @@ window.addEventListener('DOMContentLoaded', function() {
             this.title = title;
             this.descr = descr;
             this.price = price;
-            this.parentSelector = parentSelector;
+            this.parentElement = document.querySelector(parentSelector);
             this.classes = classes;
         }
 
@@ -178,11 +178,11 @@ window.addEventListener('DOMContentLoaded', function() {
                 });
             }
 
-            this.parentSelector.append(element);
+            this.parentElement.append(element);
         }
     }
 
-    let menu = document.querySelector('.menu .container');
+    let menu = '.menu .container';
 
     new MenuItem(
         'img/tabs/vegy.jpg',
@@ -214,7 +214,7 @@ window.addEventListener('DOMContentLoaded', function() {
         menu
     ).makeCard();
 
-    // POST form v 0.5
+    // POST form v 0.5.1
 
     let messages = {
         loading: "img/form/spinner.svg",
@@ -242,7 +242,7 @@ window.addEventListener('DOMContentLoaded', function() {
             formData.forEach((item, value) => formObject[item] = value);
             const formJson = JSON.stringify(formObject);
 
-            fetch('server1.php', {
+            fetch('server.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -260,9 +260,8 @@ window.addEventListener('DOMContentLoaded', function() {
                         reject(response);
                     }
                 }); 
-            })
+            }).then(response => response.text())
             .then((response)=> {
-                response.text();
                 console.log(response);
                 showStatusModal(messages.success);
             })
@@ -271,13 +270,14 @@ window.addEventListener('DOMContentLoaded', function() {
                 showStatusModal(messages.failure);
             });       
             
-            /* fetch('server1.php', {
+            /* fetch('server.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(formObject)
-            }).then(data => {
+            }).then(data => data.text())
+            .then(data => {
                 console.log(data);
                 showStatusModal(messages.success);
                 statusMessage.remove();
