@@ -145,7 +145,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // class for cards v 0.2
+    // class for cards v 0.2.1
 
     class MenuItem {
         constructor (src, alt, title, descr, price, parentSelector, ...classes) {
@@ -214,7 +214,7 @@ window.addEventListener('DOMContentLoaded', function() {
         menu
     ).makeCard();
 
-    // POST form v 0.5.1
+    // POST form v 0.5.2
 
     let messages = {
         loading: "img/form/spinner.svg",
@@ -252,7 +252,7 @@ window.addEventListener('DOMContentLoaded', function() {
             .finally(() => {
                 statusMessage.remove();
             })
-            .then((response) => {
+            .then(response => {
                 return new Promise ((resolve, reject) => {
                     if(response.status === 200) {
                         resolve(response);
@@ -260,10 +260,15 @@ window.addEventListener('DOMContentLoaded', function() {
                         reject(response);
                     }
                 }); 
-            }).then(response => response.text())
-            .then((response)=> {
-                console.log(response);
+            })
+            .then( async response=> {
+                const textResponse =  await response.text();
+                console.log(textResponse);
                 showStatusModal(messages.success);
+                return response;
+            })
+            .then(response => {
+                console.log(response);
             })
             .catch((response) => {
                 console.log(response);
