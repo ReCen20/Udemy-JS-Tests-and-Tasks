@@ -214,7 +214,7 @@ window.addEventListener('DOMContentLoaded', function() {
         menu
     ).makeCard();
 
-    // POST form v 0.5.2
+    // POST form v 0.6
 
     let messages = {
         loading: "img/form/spinner.svg",
@@ -223,9 +223,25 @@ window.addEventListener('DOMContentLoaded', function() {
     };
 
     const forms = document.querySelectorAll("form");
-    forms.forEach(item => postData(item));
+    forms.forEach(item => bindPostData(item));
+
+    const postData = async (url, data) => {
+        const response = await fetch (url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: data
+        });
+
+        if(!response.ok) {
+            throw new Error("Ups...");
+        }
+
+        return await response.json();
+    };
     
-    function postData (form) {
+    function bindPostData (form) {
         form.addEventListener("submit", function (e) {
             e.preventDefault();
 
@@ -236,61 +252,19 @@ window.addEventListener('DOMContentLoaded', function() {
                 margin: 0 auto;`;
             form.insertAdjacentElement("afterend", statusMessage);
 
-            const formData = new FormData(form),
-                formObject = {};
-            
-            formData.forEach((item, value) => formObject[item] = value);
-            const formJson = JSON.stringify(formObject);
+            const formData = JSON.stringify(Object.fromEntries((new FormData(form)).entries()));
 
-            fetch('server.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formObject)
-                })
-            .finally(() => {
+            postData("http://localhost:3000/requests", formData).finally(() => {
                 statusMessage.remove();
             })
-            .then(response => {
-                return new Promise ((resolve, reject) => {
-                    if(response.status === 200) {
-                        resolve(response);
-                    } else {
-                        reject(response);
-                    }
-                }); 
-            })
-            .then( async response=> {
-                const textResponse =  await response.text();
-                console.log(textResponse);
-                showStatusModal(messages.success);
-                return response;
-            })
-            .then(response => {
+            .then( response => {
                 console.log(response);
+                showStatusModal(messages.success);
             })
-            .catch((response) => {
+            .catch(response => {
                 console.log(response);
                 showStatusModal(messages.failure);
             });       
-            
-            /* fetch('server.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formObject)
-            }).then(data => data.text())
-            .then(data => {
-                console.log(data);
-                showStatusModal(messages.success);
-                statusMessage.remove();
-            }).catch(() => {
-                showStatusModal(messages.failure);
-            }).finally(() => {
-                form.reset();
-            }); */
         });
     }
     
@@ -316,8 +290,4 @@ window.addEventListener('DOMContentLoaded', function() {
             prevModalDialog.style.display = "block";
         }, 2000); 
     }
-
-    fetch('https://jsonplaceholder.typicode.com/todos/1')
-        .then(response => response.json())
-        .then(json => console.log(json));
 });
