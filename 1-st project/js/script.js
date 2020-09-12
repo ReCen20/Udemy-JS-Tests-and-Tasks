@@ -291,10 +291,44 @@ window.addEventListener('DOMContentLoaded', function() {
         offerSliderNext = document.querySelector(".offer__slider-next"),
         offerSliderCurrent = document.querySelector("#current");
 
-    const hideSlides = () => {
-        of
-    };
-    offerSliderPrev.addEventListener("click", (e)=> {
+    offerSlides.forEach(item => {
+        item.style.display = "none";
+    });
 
-    })
+    const hideSlide = (index) => {
+        offerSlides[index].style.display = "none";
+    };
+
+    const displaySlide = (index = 0) => {
+        offerSlides[index].style.display = "block";
+    };
+
+    displaySlide();
+
+    offerSliderPrev.addEventListener("click", (e)=> {
+        let currentIndex = +offerSliderCurrent.textContent - 1;
+        hideSlide(currentIndex);
+
+        if(currentIndex != 0) {
+            displaySlide(currentIndex - 1);
+            offerSliderCurrent.textContent = "0" + currentIndex;
+        } else {
+            displaySlide(3);
+            offerSliderCurrent.textContent = "04";
+        }  
+    });
+
+    offerSliderNext.addEventListener("click", (e)=> {
+        let currentIndex = +offerSliderCurrent.textContent - 1;
+
+        if(currentIndex != 3) {
+            hideSlide(currentIndex);
+            displaySlide(currentIndex + 1);
+            offerSliderCurrent.textContent = "0" + (currentIndex + 2);
+        } else {
+            displaySlide(0);
+            offerSliderCurrent.textContent = "01";
+        }    
+    });
+
 });
