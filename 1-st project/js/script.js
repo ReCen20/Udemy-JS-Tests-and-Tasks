@@ -145,7 +145,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // class for cards v 0.2.1
+    // class for cards v 0.3
 
     class MenuItem {
         constructor (src, alt, title, descr, price, parentSelector, ...classes) {
@@ -184,35 +184,25 @@ window.addEventListener('DOMContentLoaded', function() {
 
     let menu = '.menu .container';
 
-    new MenuItem(
-        'img/tabs/vegy.jpg',
-        'vegy',
-        'Фитнес',
-        `Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей.
-        Это абсолютно новый продукт с оптимальной ценой и высоким качеством!`,
-        '229',
-        menu,
-        "menu__item",
-        "fitness"
-    ).makeCard();
-    new MenuItem(
-        'img/tabs/elite.jpg',
-        'elite',
-        'Премиум',
-        `В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба,
-        морепродукты, фрукты - ресторанное меню без похода в ресторан!`,
-        '550',
-        menu
-    ).makeCard();
-    new MenuItem(
-        'img/tabs/post.jpg',
-        'post',
-        'Постное',
-        `Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля,
-        овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.`,
-        '430',
-        menu
-    ).makeCard();
+    const getResourses = async (url) => {
+        const response = await fetch(url);
+
+        if(!(response.ok)) {
+            throw new Error();
+        }
+
+        return await response.json();
+    };
+
+    getResourses("http://localhost:3000/menu").then(response => {
+        console.log(response);
+        response.forEach(({img, altimg, title, descr, price}) => {
+            new MenuItem(img, altimg, title, descr, price, menu).makeCard();
+        });
+    }).catch(response => {
+        console.log(response);
+        showStatusModal(messages.failure);
+    });
 
     // POST form v 0.6
 
