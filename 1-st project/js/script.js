@@ -284,7 +284,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }, 2000); 
     }
 
-    // slider 0.0.1
+    // slider 0.1
 
     const offerSlides = document.querySelectorAll(".offer__slide"),
         offerSliderPrev = document.querySelector(".offer__slider-prev"),
