@@ -1,12 +1,11 @@
 window.addEventListener('DOMContentLoaded', function() {
 
-    // tabs v 0.1
+    // tabs v 0.1.1
 
     let tabs = document.querySelectorAll('.tabheader__item'),
         tabsContent = document.querySelectorAll('.tabcontent'),
         tabsContainer = document.querySelector('.tabheader__items');
 
-    function hideTabs () {
         tabs.forEach(item => {
             item.classList.remove('tabheader__item_active');
         });
@@ -14,6 +13,10 @@ window.addEventListener('DOMContentLoaded', function() {
         tabsContent.forEach(item => {
             item.style.display = 'none';
         });
+
+    function hideTab (index) {
+        tabs[index].classList.remove('tabheader__item_active');
+        tabsContent[index].style.display = 'none';
     }
 
     function displayTab (index = 0) {
@@ -24,7 +27,6 @@ window.addEventListener('DOMContentLoaded', function() {
         tabsContent[index].style.display = 'block';
     }
 
-    hideTabs();
     displayTab();
 
     tabsContainer.addEventListener('click', function(event) {
@@ -34,8 +36,9 @@ window.addEventListener('DOMContentLoaded', function() {
         {
             tabs.forEach((item,index) => {
                 if (item == target) {
-                    hideTabs();
                     displayTab(index);
+                } else if (item.classList.contains('tabheader__item_active')) {
+                    hideTab(index);
                 }
             });
         }
@@ -280,4 +283,18 @@ window.addEventListener('DOMContentLoaded', function() {
             prevModalDialog.style.display = "block";
         }, 2000); 
     }
+
+    // slider 0.0.1
+
+    const offerSlides = document.querySelectorAll(".offer__slide"),
+        offerSliderPrev = document.querySelector(".offer__slider-prev"),
+        offerSliderNext = document.querySelector(".offer__slider-next"),
+        offerSliderCurrent = document.querySelector("#current");
+
+    const hideSlides = () => {
+        of
+    };
+    offerSliderPrev.addEventListener("click", (e)=> {
+
+    })
 });
