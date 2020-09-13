@@ -284,7 +284,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }, 2000); 
     }
 
-    // slider 0.3 "carousel"
+    // slider 0.3.1 "carousel"
 
     const offerSlider = document.querySelector(".offer__slider"),
         offerSliderIndicate = document.createElement('ol'),
@@ -298,6 +298,7 @@ window.addEventListener('DOMContentLoaded', function() {
             .slice(0, (window.getComputedStyle(offerSliderWrapper).width).length - 2));
 
     let currentIndex = 0;
+
     offerSliderIndicate.classList.add("carousel-indicators");
     offerSliderIndicate.style.cssText = `
         position: absolute;
@@ -310,6 +311,7 @@ window.addEventListener('DOMContentLoaded', function() {
         margin-right: 15%;
         margin-left: 15%;
         list-style: none;`;
+
     offerSlider.style.position = 'relative';
     offerSlider.prepend(offerSliderIndicate);
 
@@ -369,4 +371,12 @@ window.addEventListener('DOMContentLoaded', function() {
 
         displayCurrentSlide();
     });
+
+    offerSliderIndicates.forEach((item, index) => {
+        item.addEventListener("click", ()=> {
+            offerSliderIndicates[currentIndex].style.opacity = ".5";
+            currentIndex = index;
+            displayCurrentSlide();
+        });
+    })
 });
