@@ -286,54 +286,45 @@ window.addEventListener('DOMContentLoaded', function() {
 
     // slider 0.1.1
 
-    const offerSlides = document.querySelectorAll(".offer__slide"),
+    const offerSliderWrapper = document.querySelector(".offer__slider-wrapper"),
+        offerSliderInner = offerSliderWrapper.querySelector(".offer__slider-inner"),
+        //offerSlides = offerSliderInner.querySelectorAll(".offer__slide"),
         offerSliderPrev = document.querySelector(".offer__slider-prev"),
         offerSliderNext = document.querySelector(".offer__slider-next"),
         offerSliderCurrent = document.querySelector("#current"),
-        offerSliderTotal = +document.querySelector("#total").textContent;      
+        offerSliderTotal = +document.querySelector("#total").textContent,      
+        offerSliderWidth = +((window.getComputedStyle(offerSliderWrapper).width)
+            .slice(0, (window.getComputedStyle(offerSliderWrapper).width).length - 2));
 
     let currentIndex = 0;
 
-    offerSlides.forEach(item => {
-        item.style.display = "none";
-    });
+    offerSliderInner.style.transition = "1s all";
+    offerSliderInner.style.display = "flex";
+    offerSliderInner.style.width = `${100 * offerSliderTotal}%`;
+    offerSliderWrapper.style.overflow = 'hidden';
 
-    const hideSlide = () => {
-        offerSlides[currentIndex].style.display = "none";
-    };
-
-    const displaySlide = (index = 0) => {
-        offerSlides[index].style.display = "block";
-    };
-
-    const toggleSlide = () => {
-        displaySlide(currentIndex);
+    const displayCurrentSlide = () => {
+        offerSliderInner.style.transform = `translateX(-${currentIndex * offerSliderWidth}px)`;
         offerSliderCurrent.textContent = addZero(currentIndex + 1); 
     };
-
-    displaySlide();
-
-    offerSliderPrev.addEventListener("click", (e)=> {
-        hideSlide();
-
+    
+    offerSliderPrev.addEventListener("click", () => {
         if(currentIndex != 0) {
             currentIndex--;
         } else {
             currentIndex = offerSliderTotal - 1;
         }
-        
-        toggleSlide();
+
+        displayCurrentSlide();
     });
 
-    offerSliderNext.addEventListener("click", (e)=> {
-        hideSlide();
-
+    offerSliderNext.addEventListener("click", ()=> {
         if(currentIndex != (offerSliderTotal - 1)){
             currentIndex++;
         } else {
             currentIndex = 0;
         }
 
-        toggleSlide();
+        displayCurrentSlide();
     });
 });
