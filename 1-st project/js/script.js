@@ -284,31 +284,71 @@ window.addEventListener('DOMContentLoaded', function() {
         }, 2000); 
     }
 
-    // slider 0.1.1
+    // slider 0.3 "carousel"
 
-    const offerSliderWrapper = document.querySelector(".offer__slider-wrapper"),
+    const offerSlider = document.querySelector(".offer__slider"),
+        offerSliderIndicate = document.createElement('ol'),
+        offerSliderWrapper = offerSlider.querySelector(".offer__slider-wrapper"),
         offerSliderInner = offerSliderWrapper.querySelector(".offer__slider-inner"),
-        //offerSlides = offerSliderInner.querySelectorAll(".offer__slide"),
-        offerSliderPrev = document.querySelector(".offer__slider-prev"),
-        offerSliderNext = document.querySelector(".offer__slider-next"),
-        offerSliderCurrent = document.querySelector("#current"),
-        offerSliderTotal = +document.querySelector("#total").textContent,      
+        offerSliderPrev = offerSlider.querySelector(".offer__slider-prev"),
+        offerSliderNext = offerSlider.querySelector(".offer__slider-next"),
+        offerSliderCurrent = offerSlider.querySelector("#current"),
+        offerSliderTotal = +offerSlider.querySelector("#total").textContent,      
         offerSliderWidth = +((window.getComputedStyle(offerSliderWrapper).width)
             .slice(0, (window.getComputedStyle(offerSliderWrapper).width).length - 2));
 
     let currentIndex = 0;
+    offerSliderIndicate.classList.add("carousel-indicators");
+    offerSliderIndicate.style.cssText = `
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 15;
+        display: flex;
+        justify-content: center;
+        margin-right: 15%;
+        margin-left: 15%;
+        list-style: none;`;
+    offerSlider.style.position = 'relative';
+    offerSlider.prepend(offerSliderIndicate);
 
     offerSliderInner.style.transition = "1s all";
     offerSliderInner.style.display = "flex";
     offerSliderInner.style.width = `${100 * offerSliderTotal}%`;
     offerSliderWrapper.style.overflow = 'hidden';
 
+    for( let i = 0; i < offerSliderTotal; i++) {
+        const element = document.createElement("li");
+        element.classList.add("dot");
+        element.style.cssText = `
+            box-sizing: content-box;
+            flex: 0 1 auto;
+            width: 30px;
+            height: 6px;
+            margin-right: 3px;
+            margin-left: 3px;
+            cursor: pointer;
+            background-color: #fff;
+            background-clip: padding-box;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            opacity: .5;
+            transition: opacity .6s ease;`;
+        offerSliderIndicate.append(element);
+    }
+    const offerSliderIndicates = offerSliderIndicate.querySelectorAll(".dot");
+    offerSliderIndicates[currentIndex].style.opacity = "1";
+
     const displayCurrentSlide = () => {
         offerSliderInner.style.transform = `translateX(-${currentIndex * offerSliderWidth}px)`;
-        offerSliderCurrent.textContent = addZero(currentIndex + 1); 
+        offerSliderCurrent.textContent = addZero(currentIndex + 1);
+        offerSliderIndicates[currentIndex].style.opacity = "1";
     };
     
     offerSliderPrev.addEventListener("click", () => {
+        offerSliderIndicates[currentIndex].style.opacity = ".5";
+
         if(currentIndex != 0) {
             currentIndex--;
         } else {
@@ -319,6 +359,8 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 
     offerSliderNext.addEventListener("click", ()=> {
+        offerSliderIndicates[currentIndex].style.opacity = ".5";
+        
         if(currentIndex != (offerSliderTotal - 1)){
             currentIndex++;
         } else {
