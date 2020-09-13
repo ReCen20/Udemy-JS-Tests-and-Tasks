@@ -284,51 +284,56 @@ window.addEventListener('DOMContentLoaded', function() {
         }, 2000); 
     }
 
-    // slider 0.1
+    // slider 0.1.1
 
     const offerSlides = document.querySelectorAll(".offer__slide"),
         offerSliderPrev = document.querySelector(".offer__slider-prev"),
         offerSliderNext = document.querySelector(".offer__slider-next"),
-        offerSliderCurrent = document.querySelector("#current");
+        offerSliderCurrent = document.querySelector("#current"),
+        offerSliderTotal = +document.querySelector("#total").textContent;      
+
+    let currentIndex = 0;
 
     offerSlides.forEach(item => {
         item.style.display = "none";
     });
 
-    const hideSlide = (index) => {
-        offerSlides[index].style.display = "none";
+    const hideSlide = () => {
+        offerSlides[currentIndex].style.display = "none";
     };
 
     const displaySlide = (index = 0) => {
         offerSlides[index].style.display = "block";
     };
 
+    const toggleSlide = () => {
+        displaySlide(currentIndex);
+        offerSliderCurrent.textContent = addZero(currentIndex + 1); 
+    };
+
     displaySlide();
 
     offerSliderPrev.addEventListener("click", (e)=> {
-        let currentIndex = +offerSliderCurrent.textContent - 1;
-        hideSlide(currentIndex);
+        hideSlide();
 
         if(currentIndex != 0) {
-            displaySlide(currentIndex - 1);
-            offerSliderCurrent.textContent = "0" + currentIndex;
+            currentIndex--;
         } else {
-            displaySlide(3);
-            offerSliderCurrent.textContent = "04";
-        }  
+            currentIndex = offerSliderTotal - 1;
+        }
+        
+        toggleSlide();
     });
 
     offerSliderNext.addEventListener("click", (e)=> {
-        let currentIndex = +offerSliderCurrent.textContent - 1;
+        hideSlide();
 
-        if(currentIndex != 3) {
-            hideSlide(currentIndex);
-            displaySlide(currentIndex + 1);
-            offerSliderCurrent.textContent = "0" + (currentIndex + 2);
+        if(currentIndex != (offerSliderTotal - 1)){
+            currentIndex++;
         } else {
-            displaySlide(0);
-            offerSliderCurrent.textContent = "01";
-        }    
-    });
+            currentIndex = 0;
+        }
 
+        toggleSlide();
+    });
 });
