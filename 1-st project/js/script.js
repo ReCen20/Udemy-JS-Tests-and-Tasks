@@ -1,5 +1,17 @@
 window.addEventListener('DOMContentLoaded', function() {
 
+    function addZero (num) {
+        if (num >= 0 && num < 10) {
+            return `0${num}`;
+        } else {
+            return num;
+        }
+    }
+
+    function stringToNumber(string) {
+        return +string.match(/\d/g).reduce((sum, current) => { return `${sum}${current}`;});
+    }
+
     // tabs v 0.1.1
 
     let tabs = document.querySelectorAll('.tabheader__item'),
@@ -62,14 +74,6 @@ window.addEventListener('DOMContentLoaded', function() {
             minutes,
             seconds
         };
-    }
-
-    function addZero (num) {
-        if (num >= 0 && num < 10) {
-            return `0${num}`;
-        } else {
-            return num;
-        }
     }
 
     function setClock (timerSelector, endtime) {
@@ -198,7 +202,6 @@ window.addEventListener('DOMContentLoaded', function() {
     };
 
     getResourses("http://localhost:3000/menu").then(response => {
-        console.log(response);
         response.forEach(({img, altimg, title, descr, price}) => {
             new MenuItem(img, altimg, title, descr, price, menu).makeCard();
         });
@@ -294,8 +297,7 @@ window.addEventListener('DOMContentLoaded', function() {
         offerSliderNext = offerSlider.querySelector(".offer__slider-next"),
         offerSliderCurrent = offerSlider.querySelector("#current"),
         offerSliderTotal = +offerSlider.querySelector("#total").textContent,      
-        offerSliderWidth = +((window.getComputedStyle(offerSliderWrapper).width)
-            .slice(0, (window.getComputedStyle(offerSliderWrapper).width).length - 2));
+        offerSliderWidth = stringToNumber(window.getComputedStyle(offerSliderWrapper).width);
 
     let currentIndex = 0;
 
@@ -378,5 +380,5 @@ window.addEventListener('DOMContentLoaded', function() {
             currentIndex = index;
             displayCurrentSlide();
         });
-    })
+    });
 });
