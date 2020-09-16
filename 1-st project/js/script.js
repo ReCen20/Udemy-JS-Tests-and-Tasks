@@ -287,7 +287,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }, 2000); 
     }
 
-    // slider 0.3.1 "carousel"
+    // slider 0.3.2 "carousel"
 
     const offerSlider = document.querySelector(".offer__slider"),
         offerSliderIndicate = document.createElement('ol'),
@@ -381,4 +381,70 @@ window.addEventListener('DOMContentLoaded', function() {
             displayCurrentSlide();
         });
     });
+
+    // calculator v 0.0.1
+
+    let calcTotal = document.querySelector(".calculating__result span");
+
+    let male = "female",
+        ratio = "1.375",
+        height, weight, age;
+
+    function calcNorm() { 
+        if( male && ratio && height && weight && age) {
+            if (male == "female") {
+                calcTotal.textContent = Math.round((447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age)) * ratio);
+            } else {
+                calcTotal.textContent = Math.round((88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age)) * ratio);
+            }
+        } else {
+            calcTotal.textContent =  "____";
+        }
+    }
+
+    function getStaticInformation(parentSelector, activeClass) {
+        const elements = document.querySelectorAll(`${parentSelector} div`);
+
+        elements.forEach((element) => {
+            element.addEventListener("click", (e) => {
+                if (e.target.getAttribute("data-type") == "gender") {
+                    male = e.target.getAttribute("id");
+                } else if (e.target.getAttribute("data-ratio")) {
+                    ratio = +e.target.getAttribute("data-ratio");
+                }
+    
+                elements.forEach((item) => item.classList.remove(activeClass));
+                e.target.classList.add(activeClass);
+                calcNorm();
+            });
+        });
+    }
+
+    function getDynamicInformation(selector) {
+        document.querySelector(selector).addEventListener("input", (e) => {
+            switch (selector) {
+                case "#height": 
+                    height = e.target.value;
+                    break;
+                case "#weight": 
+                    weight = e.target.value;
+                    break;
+                case "#age": 
+                    age = e.target.value;
+                    break;
+                default:
+                    break;
+            }
+            calcNorm();
+        });
+    }
+
+    calcNorm();
+
+    getDynamicInformation("#height");
+    getDynamicInformation("#weight");
+    getDynamicInformation("#age");
+
+    getStaticInformation("#gender", "calculating__choose-item_active");
+    getStaticInformation(".calculating__choose_big", "calculating__choose-item_active");
 });
